@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:11be019e4079
+FROM jupyter/datascience-notebook
 MAINTAINER chapmanbe <brian.chapman@utah.edu>
 USER root
 # for physionet instructions see
@@ -7,13 +7,13 @@ USER root
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       tree \
-      graphviz\ 
+      graphviz\
       less \
       openssh-client \
       gcc \
       libcurl4-openssl-dev \
       libexpat1-dev \
-      libnetcdff5 \
+      libnetcdff-dev \
       locales-all \
       libxrender-dev \
       libfontconfig-dev \
@@ -27,13 +27,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 # Install physiosnet software
 WORKDIR /opt/wfdb
 RUN wget https://www.physionet.org/physiotools/wfdb.tar.gz && \
-    tar xvfz wfdb.tar.gz 
+    tar xvfz wfdb.tar.gz
 
-WORKDIR /opt/wfdb/wfdb-10.5.24
+WORKDIR /opt/wfdb/wfdb-10.6.0
 RUN ./configure && \
-    make install 
-WORKDIR  /opt 
-RUN rm -r /opt/wfdb 
+    make install
+WORKDIR  /opt
+RUN rm -r /opt/wfdb
 
 WORKDIR /home/jovyan
 
@@ -52,11 +52,11 @@ RUN jupyter nbextension install calysto --user && \
     jupyter nbextension enable calysto/spell-check/main && \
     jupyter nbextension enable calysto/publish/main && \
     jupyter nbextension enable calysto/submit/main && \
-    jupyter nbextension enable calysto/annotate/main 
+    jupyter nbextension enable calysto/annotate/main
 
 RUN conda update conda -y && conda install -y \
     mpld3 \
-    pip \
+    pip=9.0.1\
     pymysql \
     postgresql \
     gensim \
@@ -64,24 +64,11 @@ RUN conda update conda -y && conda install -y \
     pytables \
     scikit-image \
     pymongo \
-    spacy 
+    spacy
 
-RUN conda install -y  -c  https://conda.anaconda.org/simpleitk SimpleITK 
+RUN conda install -y  -c  https://conda.anaconda.org/simpleitk SimpleITK
 RUN conda install -y  -c conda-forge nbstripout
-RUN pip install pydicom \
-    textblob \
-    ipythonblocks \
-    pydotplus \
-    nbstripout \
-    pycontextnlp \
-    radnlp \
-    fhirclient \
-    pivottablejs \
-    girder_client \
-    nose \
-    pyorient
 
-RUN R -e 'install.packages(c("tidyverse","tidytext","icd","RMySQL","DBI","dbplyr","SuperLearner","caret","tensorflow","ggdendro","tree"), dependencies = TRUE, repos = "https://cran.cnr.berkeley.edu/" )'
 
 WORKDIR /home/jovyan
 ADD decart_welcome.ipynb /home/jovyan/work/decart_welcome.ipynb

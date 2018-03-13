@@ -8,22 +8,22 @@ services:
       - PASSWORD=bmi6950
       - USE_HTTPS=yes
     volumes:
-      - /Users/brian/Bdrive/UUDS4HealthData/Data:/home/jovyan/DATA:ro
-    links:
-      - mysolr
-      - mynlp
-      - mymongo
-      - mysql
-  mysolr:
-    image: solr:latest
-    hostname: mysolr
-    domainname: localdomain
-    ports:
-      - "8983:8983"
-  mynlp:
-    image: motiz88/corenlp
-    ports:
-      - "9000:9000"
+      - /Users/kevingraves/code_directory:/home/jovyan/DATA:ro
+  #  links:
+  #    - mysolr
+  #    - mynlp
+  #    - mymongo
+  #    - mysql
+  #mysolr:
+  #  image: solr:latest
+  #  hostname: mysolr
+  #  domainname: localdomain
+  #  ports:
+  #    - "8983:8983"
+  #mynlp:
+  #  image: motiz88/corenlp
+  #  ports:
+  #    - "9000:9000"
   mysql:
     image: mysql:latest
     environment:
@@ -34,18 +34,18 @@ services:
     image: mongo:latest
     volumes:
       - /Users/brian/Bdrive/6950mongo:/data/db
-  remotedata:
-    build: ./web-server
-    ports:
-        - "8080:80"
-  sshserver:
-    build: ./ssh-server
-    environment:
-        - AUTH_MECHANISM=simpleAuth
-        - AUTH_USER=jovyan
-        - AUTH_PASSWORD=jovyan
-        - HTTP_ENABLED=false
-    ports:
-        - "2212:22"
-  orientdb:
-      image: orientdb:latest
+  #remotedata:
+  #  build: ./web-server
+  #  ports:
+  #      - "8080:80"
+  #sshserver:
+  #  build: ./ssh-server
+  #  environment:
+  #      - AUTH_MECHANISM=simpleAuth
+  #      - AUTH_USER=jovyan
+  #      - AUTH_PASSWORD=jovyan
+  #      - HTTP_ENABLED=false
+  #  ports:
+  #      - "2212:22"
+  #orientdb:
+  #    image: orientdb:latest
